@@ -104,7 +104,7 @@ app.put("/complete", (req, res) => {
         "name": req.body.name
     }, {
         "$set": {
-            "completed": true
+            "completed": req.body.completed
         }
         }, (error) => {
             if (error) {console.log(error)}
