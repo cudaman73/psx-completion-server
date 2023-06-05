@@ -36,23 +36,25 @@ const currentGame = mongoose.model("currentGame", currentGameSchema);
 
 
 app.get("/uncompleted-games", (req, res) => {
-    Game.find({completed: false}, (err, games) =>{
-        if (err) {
-            console.log(err);
-        } else {
-        res.json(games)
-        }
-    });
+    Game.find({completed: false}).sort({"name": 1}).exec(
+        function(err, games) {
+            if (err) {
+                console.log(err);
+            } else {
+            res.json(games)
+            }
+        });
 });
 
 app.get("/completed-games", (req, res) => {
-    Game.find({completed: true}, (err, games) =>{
-        if (err) {
-            console.log(err);
-        } else {
-        res.json(games)
-        }
-    });
+    Game.find({completed: true}).sort({"name": 1}).exec(
+        function(err, games) {
+            if (err) {
+                console.log(err);
+            } else {
+            res.json(games)
+            }
+        });
 });
 
 
