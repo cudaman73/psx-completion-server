@@ -86,18 +86,18 @@ app.put("/update-current-game", (req, res) => {
 })
 
 
-app.put("/uncomplete", (req, res) => {
-    Game.updateOne({
-        "name": req.body.newGame.name
-    }, {
-        "$set": {
-            "completed": false
-        }
-        }, (error) => {
-            if (error) {console.log(error)}
-        }
-    );
-});
+// app.put("/uncomplete", (req, res) => {
+//     Game.updateOne({
+//         "name": req.body.newGame.name
+//     }, {
+//         "$set": {
+//             "completed": false
+//         }
+//         }, (error) => {
+//             if (error) {console.log(error)}
+//         }
+//     );
+// });
 
 app.put("/complete", (req, res) => {
     Game.updateOne({
@@ -106,8 +106,14 @@ app.put("/complete", (req, res) => {
         "$set": {
             "completed": req.body.completed
         }
-        }, (error) => {
-            if (error) {console.log(error)}
+        }, (error, result) => {
+            if (error) {
+                console.log(error)
+                res.status(500).json({ error: error.toString() });
+            } else {
+                console.log("Updated completion of " + req.body.name);
+                res.status(200).json({ message: "Updated completion of " + req.body.name, modifiedCount: result.nModified });
+            } 
         }
     );
 });
