@@ -99,7 +99,7 @@ app.put("/update-current-game", (req, res) => {
 //     );
 // });
 
-app.put("/complete", (req, res) => {
+app.put("/toggle-completion", (req, res) => {
     Game.updateOne({
         "name": req.body.name
     }, {
