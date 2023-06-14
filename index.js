@@ -44,7 +44,8 @@ app.get("/uncompleted-games", (req, res) => {
             } else {
             res.status(200).json(games)
             }
-        });
+        }
+    );
 });
 
 app.get("/completed-games", (req, res) => {
@@ -56,7 +57,21 @@ app.get("/completed-games", (req, res) => {
             } else {
             res.status(200).json(games)
             }
-        });
+        }
+    );
+});
+
+app.get("/games", (req, res) => {
+    Game.find(req.body).sort({"name": 1}).exec(
+        function (err, games) {
+            if (err) {
+                console.log(err)
+                res.status(500).json({error: err.toString});
+            } else {
+                res.status(200).json(games);
+            }
+        }
+    )
 });
 
 
@@ -66,9 +81,8 @@ app.get("/get-current-game", (req, res) => {
     }, (err, game) => {
         if (err) {
             console.log(err);
-            res.status(500).json({error: error.toString() });    
-        }
-        else {
+            res.status(500).json({error: err.toString() });    
+        } else {
             res.status(200).json(game);
         }
     });
@@ -83,10 +97,10 @@ app.put("/update-current-game", (req, res) => {
             "completed": req.body.newGame.completed,
             "url": req.body.newGame.url
         }
-        }, (error, result) => {
-        if (error) {
-            console.log(error);
-            res.status(500).json({error: error.toString() });
+        }, (err, res) => {
+        if (err) {
+            console.log(err);
+            res.status(500).json({error: err.toString() });
         } else {
             console.log("Updated current game to " + req.body.newGame.name);
             res.status(200).json({ message: "Updated Current Game to: " + req.body.name});
@@ -115,10 +129,10 @@ app.put("/toggle-completion", (req, res) => {
         "$set": {
             "completed": req.body.completed
         }
-        }, (error, result) => {
-            if (error) {
+        }, (err, res) => {
+            if (err) {
                 console.log(error)
-                res.status(500).json({ error: error.toString() });
+                res.status(500).json({ error: err.toString() });
             } else {
                 console.log("Updated completion of " + req.body.name);
                 res.status(200).json({ message: "Updated completion of " + req.body.name });
