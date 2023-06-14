@@ -40,8 +40,9 @@ app.get("/uncompleted-games", (req, res) => {
         function(err, games) {
             if (err) {
                 console.log(err);
+                res.status(500).json({error: error.toString() });
             } else {
-            res.json(games)
+            res.status(200).json(games)
             }
         });
 });
@@ -51,8 +52,9 @@ app.get("/completed-games", (req, res) => {
         function(err, games) {
             if (err) {
                 console.log(err);
+                res.status(500).json({error: error.toString() });
             } else {
-            res.json(games)
+            res.status(200).json(games)
             }
         });
 });
@@ -62,9 +64,12 @@ app.get("/get-current-game", (req, res) => {
     currentGame.find({
         _id: '63221468bedf342278bc8f56'
     }, (err, game) => {
-        if (err) console.log(err);
+        if (err) {
+            console.log(err);
+            res.status(500).json({error: error.toString() });    
+        }
         else {
-            res.json(game);
+            res.status(200).json(game);
         }
     });
 });
@@ -78,10 +83,14 @@ app.put("/update-current-game", (req, res) => {
             "completed": req.body.newGame.completed,
             "url": req.body.newGame.url
         }
-        }, 
-        (error, result) => {
-        if (error) {console.log(error)}
-            console.log(result)
+        }, (error, result) => {
+        if (error) {
+            console.log(error);
+            res.status(500).json({error: error.toString() });
+        } else {
+            console.log("Updated current game to " + req.body.newGame.name);
+            res.status(200).json({ message: "Updated Current Game to: " + req.body.name});
+        }
     })
 })
 
@@ -112,7 +121,7 @@ app.put("/toggle-completion", (req, res) => {
                 res.status(500).json({ error: error.toString() });
             } else {
                 console.log("Updated completion of " + req.body.name);
-                res.status(200).json({ message: "Updated completion of " + req.body.name, modifiedCount: result.nModified });
+                res.status(200).json({ message: "Updated completion of " + req.body.name });
             } 
         }
     );
